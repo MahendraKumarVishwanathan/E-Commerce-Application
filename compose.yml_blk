@@ -1,0 +1,85 @@
+services:
+  ecommerce-ui:
+    image: ecommerce-ui
+    container_name: ecommerce-ui2
+    ports:
+      - "4000:4000"
+    networks:
+      - mahi-network
+    environment:
+      - REACT_APP_PROFILE_API_HOST=http://profile-management2
+      - REACT_APP_PRODUCT_API_HOST=http://product-catalog2
+      - REACT_APP_INVENTORY_API_HOST=http://product-inventory2
+      - REACT_APP_ORDER_API_HOST=http://order-management2
+      - REACT_APP_SHIPPING_API_HOST=http://shipping-and-handling2
+      - REACT_APP_CONTACT_API_HOST=http://contact-support-team2
+    restart: always
+    depends_on:
+      - profile-management
+      - product-catalog
+      - product-inventory
+      - order-management
+      - shipping-and-handling
+      - contact-support-team
+
+  order-management:
+    image: order-management
+    container_name: order-management2
+    ports:
+      - "9090:9090"
+    networks:
+      - mahi-network
+    environment:
+      - PRODUCT_INVENTORY_API_HOST=http://product-inventory2
+      - PRODUCT_CATALOG_API_HOST=http://product-catalog2
+      - SHIPPING_HANDLING_API_HOST=http://shipping-and-handling2
+    restart: always
+
+  product-inventory:
+    image: product-inventory
+    container_name: product-inventory2
+    ports:
+      - "3002:3002"
+    networks:
+      - mahi-network
+    restart: always
+
+  product-catalog:
+    image: product-catalog
+    container_name: product-catalog2
+    ports:
+      - "3001:3001"
+    networks:
+      - mahi-network
+    restart: always
+
+  shipping-and-handling:
+    image: shipping-and-handling
+    container_name: shipping-and-handling2
+    ports:
+      - "8080:8080"
+    networks:
+      - mahi-network
+    restart: always  
+
+  contact-support-team:
+    image: contact-support-team
+    container_name: contact-support-team2
+    ports:
+      - "8000:8000"
+    networks:
+      - mahi-network
+    restart: always  
+
+  profile-management:
+    image: profile-management
+    container_name: profile-management2
+    ports:
+      - "3003:3003"
+    networks:
+      - mahi-network
+    restart: always
+
+networks:
+  mahi-network:
+    driver: bridge
